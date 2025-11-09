@@ -1,0 +1,20 @@
+[
+  {
+    "allocationType": "default",
+    "id": "branch_product_entity_pincode_territory",
+    "attributes": ["branch","product","entity","pincode","territory"],
+    "expression": ""
+  },
+  {
+    "allocationType": "default",
+    "id": "branch_and_product",
+    "attributes": ["branch","product"],
+    "expression": ""
+  },
+  {
+    "allocationType": "default",
+    "id": "entity",
+    "attributes": ["entity"],
+    "expression": ""
+  }
+]
