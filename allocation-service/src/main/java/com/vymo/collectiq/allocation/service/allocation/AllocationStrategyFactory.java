@@ -8,7 +8,12 @@ import java.util.Map;
 
 public class AllocationStrategyFactory {
     @Autowired ConfigServer configServer;
-    private Map<String,AllocationStrategy> strategies = new HashMap<>();
+    private final Map<String,AllocationStrategy> strategies = new HashMap<>();
+
+    public AllocationStrategy obtainAllocationStrategy(String strategy){
+        return  strategies.get(strategy);
+    }
+
     public AllocationStrategy obtainAllocationStrategy(){
         String chosenAllocationStrategy = (String)configServer.getConfig("strategy");
         return  strategies.get(chosenAllocationStrategy);

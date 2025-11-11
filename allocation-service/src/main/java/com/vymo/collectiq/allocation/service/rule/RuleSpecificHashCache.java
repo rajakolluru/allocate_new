@@ -14,19 +14,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.vymo.collectiq.allocation.configuration.dao.LoaderUtil.loadRules;
-
 public class RuleSpecificHashCache implements RuleMatcher{
     private static final Logger logger = LoggerFactory.getLogger(RuleSpecificHashCache.class);
-    private final UserCache userCache;
-    private final List<Rule> availableRules;
-    private final Map<String, Map<CacheKey, RukeSpecificData>> ruleCaches = new HashMap<>();
+    private  List<Rule> availableRules;
+    private final Map<String, Map<CacheKey, RuleSpecificData>> ruleCaches = new HashMap<>();
 
-    public RuleSpecificHashCache(UserCache userCache) throws Exception {
-        this.userCache = userCache;
-        this.availableRules = loadRules();
+    public RuleSpecificHashCache(){}
+
+    public void load(List<User> users, List<Rule> rules) throws Exception {
+        this.availableRules = rules;
+        load(users);
+    }
+
+    public void load(List<User> users) throws Exception{
         long startTime = System.nanoTime();
-        constructCache();
+        constructCache(users);
         long endTime = System.nanoTime();
         logger.info("RuleSpecificHashCache: Time to construct the cache: " + (endTime - startTime)/1000 + " micros");
     }
@@ -47,14 +49,14 @@ public class RuleSpecificHashCache implements RuleMatcher{
        return users.stream().filter((user) -> match(rule,user)).toList();
     }
 
-    private void constructCache(){
+    private void constructCache(List<User> users){
         for (Rule rule: this.availableRules){
-            Map<CacheKey, List<User>> usersMap = this.userCache.users.stream()
+            Map<CacheKey, List<User>> usersMap = users.stream()
                     .collect(Collectors.groupingBy(user ->  new CacheKey(rule,user)));
-            usersMap.replaceAll(((cacheKey, users) -> filterByExpression(rule,users)));
+            usersMap.replaceAll(((cacheKey, users1) -> filterByExpression(rule,users1)));
             ruleCaches.put(rule.getId(),usersMap.entrySet().stream().
                     collect(Collectors.toMap(Map.Entry::getKey,
-                            entry->{return new RukeSpecificData(entry.getValue());})));
+                            entry->{return new RuleSpecificData(entry.getValue());})));
         }
     }
 
@@ -65,10 +67,13 @@ public class RuleSpecificHashCache implements RuleMatcher{
         for (Rule rule: availableRules){
             if (!input.allocationType.equals(rule.getAllocationType()))
                 continue;
+            //  System.out.println("Received case: " + input.allocatableEntity + " Rule = " + rule.getId());
             CacheKey cacheKey = CacheKey.constructCacheKey(rule,filterAttributes);
+            // System.out.println("Cache key = " + cacheKey);
             if (cacheKey == null)
                 continue;
-            RukeSpecificData val = ruleCaches.get(rule.getId()).get(cacheKey);
+            RuleSpecificData val = ruleCaches.get(rule.getId()).get(cacheKey);
+            // System.out.println("Retrieved users = " + val.users);
             if (val != null){
                 ruleMatcherOut.rule = rule;
                 ruleMatcherOut.users = val.users;

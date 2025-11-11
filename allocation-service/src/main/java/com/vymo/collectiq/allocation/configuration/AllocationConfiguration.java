@@ -9,7 +9,7 @@ import com.vymo.collectiq.allocation.service.config.ConfigServerImpl;
 import com.vymo.collectiq.allocation.service.healthcheck.AllocationHealthChecker;
 import com.vymo.collectiq.allocation.service.impl.AllocationServiceImpl;
 import com.vymo.collectiq.allocation.service.rule.RuleSpecificHashCache;
-import com.vymo.collectiq.allocation.service.rule.UserCache;
+import com.vymo.collectiq.allocation.service.users.UsersDB;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,14 +29,13 @@ public class AllocationConfiguration {
     	return new AllocationHealthChecker();
     }
 
-	@Bean
-	public UserCache userCache() throws Exception {
-		return new UserCache("target/users1.csv");
+	@Bean UsersDB usersDB(){
+		return new UsersDB();
 	}
 
 	@Bean
-	RuleSpecificHashCache ruleSpecificCache(UserCache userCache) throws Exception{
-		return new RuleSpecificHashCache(userCache);
+	RuleSpecificHashCache ruleSpecificCache() throws Exception{
+		return new RuleSpecificHashCache();
 	}
 
 	@Bean
@@ -66,19 +65,30 @@ public class AllocationConfiguration {
 	}
 
 	@Bean
+	AllocationStrategy weightedAllocationStrategy(AllocationStrategyFactory factory) throws Exception{
+		AllocationStrategy allocationStrategy = new WeightedAllocationStrategy();
+		factory.registerAllocationStrategy("weighted.allocation",allocationStrategy);
+		return allocationStrategy;
+	}
+
+	@Bean
 	ThresholdChecker thresholdChecker() throws Exception{
 		return new ThresholdCheckerImpl();
 	}
 
 	@Bean
-	AllocationCache allocationCache(UserCache userCache) throws Exception{
-		return new AllocationCache(userCache);
+	AllocationCache allocationCache() throws Exception{
+		return new AllocationCache();
 	}
 
 	@Bean
 	@ConfigurationProperties(prefix = "allocation")
 	ConfigServerImpl configServer() throws Exception{
 		return new ConfigServerImpl();
+	}
+
+	@Bean AgencyAllocationWeightages agencyAllocationWeightages(){
+		return new AgencyAllocationWeightages();
 	}
 
 }

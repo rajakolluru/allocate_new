@@ -6,4 +6,5 @@ public class AllocationInput {
     public static final String DEFAULT_ALLOCATION_TYPE = "default";
     public Map<String,String> allocatableEntity;
     public String allocationType = DEFAULT_ALLOCATION_TYPE;
+    public String allocationStrategy ;
 }

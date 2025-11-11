@@ -4,6 +4,7 @@ import com.vymo.collectiq.allocation.dto.AllocationInput;
 import com.vymo.collectiq.allocation.model.RuleMatcherOut;
 import com.vymo.collectiq.allocation.model.User;
 import com.vymo.collectiq.allocation.service.AllocationService;
+import com.vymo.collectiq.allocation.service.allocation.AllocationStrategy;
 import com.vymo.collectiq.allocation.service.allocation.AllocationStrategyFactory;
 import com.vymo.collectiq.allocation.service.check.ThresholdChecker;
 import com.vymo.collectiq.allocation.service.rule.RuleSpecificHashCache;
@@ -36,7 +37,12 @@ public class AllocationServiceImpl implements AllocationService{
             if(allocatedUser != null){
                 matchedUsers.remove(allocatedUser);
             }
-            allocatedUser = allocationStrategyFactory.obtainAllocationStrategy().allocate(ruleMatcherOut);
+            AllocationStrategy allocationStrategy;
+            if (input.allocationStrategy != null && !input.allocationStrategy.isEmpty())
+                allocationStrategy = allocationStrategyFactory.obtainAllocationStrategy(input.allocationStrategy);
+            else
+                allocationStrategy = allocationStrategyFactory.obtainAllocationStrategy();
+            allocatedUser = allocationStrategy.allocate(ruleMatcherOut,input.allocatableEntity);
             if (allocatedUser == null) return null;
         }while(!thresholdChecker.eligible(allocatedUser));
         return allocatedUser;

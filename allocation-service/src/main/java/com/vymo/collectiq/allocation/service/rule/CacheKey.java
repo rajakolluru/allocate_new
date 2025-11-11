@@ -53,4 +53,10 @@ public class CacheKey {
         return Arrays.hashCode(keys.toArray());
     }
 
+    @Override
+    public String toString() {
+        return "CacheKey{" +
+                "keys=" + keys +
+                '}';
+    }
 }

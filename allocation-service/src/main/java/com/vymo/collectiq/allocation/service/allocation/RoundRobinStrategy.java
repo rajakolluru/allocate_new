@@ -4,6 +4,7 @@ import com.vymo.collectiq.allocation.model.RuleMatcherOut;
 import com.vymo.collectiq.allocation.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Store the last allocated index in the meta data. Use that to circle through the contending
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public class RoundRobinStrategy implements AllocationStrategy{
     @Override
-    public User allocate(RuleMatcherOut ruleMatcherOut) {
+    public User allocate(RuleMatcherOut ruleMatcherOut, Map<String,String> allocatableEntity) {
         List<User> users = ruleMatcherOut.users;
         if (users == null || users.isEmpty()){
             return null;

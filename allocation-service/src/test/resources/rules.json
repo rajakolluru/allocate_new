@@ -16,5 +16,11 @@
     "id": "entity",
     "attributes": ["entity"],
     "expression": ""
+  },
+  {
+    "allocationType": "agency-to-agent",
+    "id": "agency-agent",
+    "attributes": ["entity"],
+    "expression": ""
   }
 ]

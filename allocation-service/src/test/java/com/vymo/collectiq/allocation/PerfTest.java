@@ -4,6 +4,7 @@ import com.vymo.collectiq.allocation.dto.AllocationInput;
 import com.vymo.collectiq.allocation.model.RuleMatcherOut;
 import com.vymo.collectiq.allocation.model.User;
 import com.vymo.collectiq.allocation.service.AllocationService;
+import com.vymo.collectiq.allocation.service.allocation.AgencyAllocationWeightages;
 import com.vymo.collectiq.allocation.service.rule.RuleMatcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 public class PerfTest {
     @Autowired @Qualifier("ruleSpecificCache") RuleMatcher ruleSpecificCache;
     @Autowired AllocationService allocationService;
+    @Autowired AgencyAllocationWeightages agencyAllocationWeightages;
 
     @Test
     public void testUserRuleCacheWithNoMatches(){
@@ -73,12 +75,9 @@ public class PerfTest {
         timeIt(map,ruleSpecificCache);
     }
 
-    @Test public void testBulkAllocation() throws IOException {
-        String filename = "target/cases.csv";
+    private Map<String,Integer> testCases(String filename, String allocationStrategy,
+                                          String allocationType)throws IOException{
         Map<String, Integer> allocationCounts = new HashMap<>();
-        System.out.println("Doing Bulk Allocation");
-        System.out.println("=============================");
-        long startTime = System.nanoTime();
         try (InputStream inputStream = new FileInputStream(filename)) {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
                 String line;
@@ -103,6 +102,10 @@ public class PerfTest {
                         case1.put(headers[5].trim(), values[5].trim());
                         AllocationInput input = new AllocationInput();
                         input.allocatableEntity = case1;
+                        if (allocationStrategy != null)
+                            input.allocationStrategy = allocationStrategy;
+                        if (allocationType != null)
+                            input.allocationType = allocationType;
                         User allocatedUser = allocationService.doAllocation(input);
                         String id = allocatedUser.getId();
                         int count = allocationCounts.computeIfAbsent(id,(id1)-> 0);
@@ -111,6 +114,15 @@ public class PerfTest {
                 }
             }
         }
+        return allocationCounts;
+    }
+
+    @Test public void testBulkAllocation() throws IOException {
+        String filename = "target/cases.csv";
+        System.out.println("Doing Bulk Allocation");
+        System.out.println("=============================");
+        long startTime = System.nanoTime();
+        Map<String,Integer> allocationCounts = testCases(filename,null,null);
         long endTime = System.nanoTime();
         System.out.println("Time taken: " + (endTime - startTime)/1000 + " micros");
         System.out.println("Allocation statistics:");
@@ -120,6 +132,38 @@ public class PerfTest {
         System.out.println(stats);
         System.out.println("Total count of all cases allocated = " + allocationCounts.values().stream().
                 mapToInt(Integer::intValue).sum());
+    }
+
+    @Test public void testAgencyAgentDefaultAllocation() throws IOException {
+        String filename = "src/test/resources/agent-cases.csv";
+        System.out.println("Testing Agent Allocation");
+        System.out.println("=============================");
+        long startTime = System.nanoTime();
+        Map<String,Integer> allocationCounts = testCases(filename,null,"agency-to-agent");
+        long endTime = System.nanoTime();
+        System.out.println("Time taken: " + (endTime - startTime)/1000 + " micros");
+        System.out.println("Allocation stats:" + allocationCounts);
+    }
+
+    @Test public void testAgencyAgentWeightedAllocation() throws IOException {
+        setAllocationWeightages();
+        String filename = "src/test/resources/agent-cases.csv";
+        System.out.println("Testing Agent Allocation");
+        System.out.println("=============================");
+        long startTime = System.nanoTime();
+        Map<String,Integer> allocationCounts = testCases(filename,"weighted.allocation","agency-to-agent");
+        long endTime = System.nanoTime();
+        System.out.println("Time taken: " + (endTime - startTime)/1000 + " micros");
+        System.out.println("Allocation stats:" + allocationCounts);
+    }
+
+    private void setAllocationWeightages(){
+        Map<String,Integer> weightages = new HashMap<>();
+        weightages.put("Agent2002",50);
+        weightages.put("Agent2001",25);
+        weightages.put("Agent2003",20);
+        weightages.put("Agent2005",5);
+        agencyAllocationWeightages.prep("Agency99",weightages);
     }
 
     @Test public void testAllocation(){

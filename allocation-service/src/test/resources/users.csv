@@ -1,4 +1,4 @@
-userid,branch,product,entity,attribute4,attribute5
+id,branch,product,entity,attribute4,attribute5
 user1,NYC,Savings,Retail,value1,valueA
 user2,LAX,Checking,Retail,value2,valueB
 user3,NYC,Savings,Commercial,value3,valueC
@@ -6,3 +6,8 @@ user4,NYC,Checking,Retail,value1,valueA
 user5,LAX,Savings,Commercial,value2,valueB
 user6,NYC,Savings,Retail,value3,valueC
 user7,LAX,Checking,Retail,value1,valueA
+Agent2001,LAX,Checking,Agency99,value1,valueA
+Agent2002,LAX,Checking,Agency99,value1,valueA
+Agent2003,LAX,Checking,Agency99,value1,valueA
+Agent2004,LAX,Checking,Agency99,value1,valueA
+Agent2005,LAX,Checking,Agency99,value1,valueA

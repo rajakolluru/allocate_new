@@ -14,8 +14,9 @@ import java.util.Optional;
  */
 public class LeastUsedAllocationStrategy implements AllocationStrategy{
     @Autowired AllocationCache allocationCache;
+
     @Override
-    public User allocate(RuleMatcherOut ruleMatcherOut) {
+    public User allocate(RuleMatcherOut ruleMatcherOut,Map<String,String> allocatableEntity) {
         List<User> users = ruleMatcherOut.users;
         Map<User,Integer> intersectingKeys = allocationCache.sortedIntersection(users);
         // System.out.println("Intersection keys = " + intersectingKeys);

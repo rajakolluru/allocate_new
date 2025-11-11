@@ -1,4 +1,4 @@
-package com.vymo.collectiq.allocation.configuration.dao;
+package com.vymo.collectiq.allocation.service.load;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,7 +49,7 @@ public class LoaderUtil {
         return userList;
     }
 
-    public static List<Rule> loadRules() throws IOException {
+    public static List<Rule> loadRules(String path) throws IOException {
         try (InputStream inputStream = LoaderUtil.class.getResourceAsStream("/rules.json")) {
             if (inputStream == null) {
                 throw new IllegalStateException("rules.json not found in resources folder!");

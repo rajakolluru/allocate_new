@@ -10,7 +10,7 @@ import java.util.random.RandomGenerator;
 public class RandomAllocationStrategy implements AllocationStrategy{
     RandomGenerator randomGenerator = RandomGenerator.getDefault();
     @Override
-    public User allocate(RuleMatcherOut ruleMatcherOut) {
+    public User allocate(RuleMatcherOut ruleMatcherOut,Map<String,String> allocatableEntity) {
         List<User> users = ruleMatcherOut.users;
         if (users == null || users.isEmpty()) return null;
         // System.out.println("users is " + users);
