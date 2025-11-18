@@ -4,6 +4,7 @@ import com.vymo.collectiq.allocation.dto.AllocationInput;
 import com.vymo.collectiq.allocation.model.RuleMatcherOut;
 import com.vymo.collectiq.allocation.model.User;
 import com.vymo.collectiq.allocation.service.AllocationService;
+import com.vymo.collectiq.allocation.service.allocation.AgencyAllocationWeightages;
 import com.vymo.collectiq.allocation.service.allocation.AllocationStrategy;
 import com.vymo.collectiq.allocation.service.allocation.AllocationStrategyFactory;
 import com.vymo.collectiq.allocation.service.check.ThresholdChecker;
@@ -21,6 +22,7 @@ public class AllocationServiceImpl implements AllocationService{
     @Autowired private RuleSpecificHashCache ruleSpecificHashCache;
     @Autowired private AllocationStrategyFactory allocationStrategyFactory;
     @Autowired private ThresholdChecker thresholdChecker;
+    @Autowired private AgencyAllocationWeightages agencyAllocationWeightages;
 
     public User doAllocation(AllocationInput input){
         Map<String, String> allocatableEntity = input.allocatableEntity;
@@ -46,5 +48,9 @@ public class AllocationServiceImpl implements AllocationService{
             if (allocatedUser == null) return null;
         }while(!thresholdChecker.eligible(allocatedUser));
         return allocatedUser;
+    }
+
+    public void assignWeightages (String agency, Map<String,Integer> weightages){
+        agencyAllocationWeightages.prep(agency,weightages);
     }
 }
