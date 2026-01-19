@@ -5,9 +5,12 @@ import org.springframework.expression.Expression;
 import java.util.List;
 
 public class Rule {
-    public Expression parsedExpression;
+    public static final  String DEFAULT_ALLOCATEE_TYPE = "user";
+    public Expression parsedUserExpression;
+    public Expression parsedAllocatableEntityExpression;
     private String id;
     private List<String> attributes;
+    public String allocateeType = DEFAULT_ALLOCATEE_TYPE;
 
     public String getAllocationType() {
         return allocationType;
@@ -19,16 +22,25 @@ public class Rule {
 
     private String allocationType;
 
-    public String getExpression() {
-        return expression;
+    public String getUserExpression() {
+        return userExpression;
     }
 
-    public void setExpression(String expression) {
-        this.expression = expression;
+    public void setUserExpression(String expression) {
+        this.userExpression = expression;
     }
 
-    private String expression; // OGNL expression to filter the users.
+    private String userExpression; // OGNL expression to filter the users.
 
+    public String getAllocatableEntityExpression() {
+        return allocatableEntityExpression;
+    }
+
+    public void setAllocatableEntityExpression(String allocatableEntityExpression) {
+        this.allocatableEntityExpression = allocatableEntityExpression;
+    }
+
+    private String allocatableEntityExpression; // Expression to filter out from allocatableEntity
     public Rule() {}
 
     public Rule(String id, List<String> attributes) {

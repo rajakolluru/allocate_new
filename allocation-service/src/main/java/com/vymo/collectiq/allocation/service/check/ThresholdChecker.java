@@ -1,9 +1,7 @@
 package com.vymo.collectiq.allocation.service.check;
 
-import com.vymo.collectiq.allocation.model.User;
-
-import java.util.Map;
+import com.vymo.collectiq.allocation.model.Allocatee;
 
 public interface ThresholdChecker {
-    public boolean eligible(User user);
+    public boolean eligible(String allocateeType, Allocatee allocatee);
 }

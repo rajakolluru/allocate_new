@@ -1,8 +1,8 @@
 package com.vymo.collectiq.allocation;
 
 import com.vymo.collectiq.allocation.dto.AllocationInput;
+import com.vymo.collectiq.allocation.model.Allocatee;
 import com.vymo.collectiq.allocation.model.RuleMatcherOut;
-import com.vymo.collectiq.allocation.model.User;
 import com.vymo.collectiq.allocation.service.AllocationService;
 import com.vymo.collectiq.allocation.service.allocation.AgencyAllocationWeightages;
 import com.vymo.collectiq.allocation.service.rule.RuleMatcher;
@@ -93,7 +93,7 @@ public class PerfTest {
 
                     String[] values = line.split(",");
                     if (values.length >= 6) {
-                        Map<String,String> case1 = new User();
+                        Map<String,String> case1 = new Allocatee();
                         case1.put(headers[0].trim(), values[0].trim());
                         case1.put(headers[1].trim(), values[1].trim());
                         case1.put(headers[2].trim(), values[2].trim());
@@ -106,8 +106,8 @@ public class PerfTest {
                             input.allocationStrategy = allocationStrategy;
                         if (allocationType != null)
                             input.allocationType = allocationType;
-                        User allocatedUser = allocationService.doAllocation(input);
-                        String id = allocatedUser.getId();
+                        Allocatee allocatedAllocatee = allocationService.doAllocation(input);
+                        String id = allocatedAllocatee.getId();
                         int count = allocationCounts.computeIfAbsent(id,(id1)-> 0);
                         allocationCounts.put(id,++count);
                     }
@@ -177,4 +177,6 @@ public class PerfTest {
         input.allocatableEntity = map;
         System.out.println("Allocation service returns " + allocationService.doAllocation(input));
     }
+
+
 }

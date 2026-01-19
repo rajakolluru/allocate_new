@@ -1,7 +1,7 @@
 package com.vymo.collectiq.allocation.configuration.controller;
 
 import com.vymo.collectiq.allocation.dto.AllocationInput;
-import com.vymo.collectiq.allocation.model.User;
+import com.vymo.collectiq.allocation.model.Allocatee;
 import jakarta.servlet.http.HttpServletRequest;
 import org.chenile.base.response.GenericResponse;
 import org.chenile.http.annotation.ChenileController;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @ChenileController(value = "allocationService", serviceName = "_allocationService_",
@@ -21,7 +20,7 @@ import java.util.Map;
 public class AllocationController extends ControllerSupport{
     @EventsSubscribedTo("xxx")
     @PostMapping("/allocation/filter")
-    public ResponseEntity<GenericResponse<List<User>>> doAllocation(
+    public ResponseEntity<GenericResponse<List<Allocatee>>> doAllocation(
             HttpServletRequest httpServletRequest,
             @RequestBody AllocationInput allocationInput){
         return process(httpServletRequest,allocationInput);

@@ -2,17 +2,15 @@
   {
     "allocationType": "default",
     "id": "branch_product_entity_pincode_territory",
-    "attributes": ["branch","product","entity","pincode","territory"],
-    "userExpression": "",
-    "allocateeType": "user",
-    "allocatableEntityExpression": ""
+    "attributes": ["branch","vertical"],
+    "userExpression": "user.role == 'BDR' ",
+    "allocatableEntityExpression": "allocatableEntity.assign_to_branch_staff == 'NO' "
   },
   {
     "allocationType": "default",
     "id": "branch_and_product",
     "attributes": ["branch","product"],
     "userExpression": "",
-    "allocateeType": "user",
     "allocatableEntityExpression": ""
   },
   {
@@ -20,15 +18,6 @@
     "id": "entity",
     "attributes": ["entity"],
     "userExpression": "",
-    "allocateeType": "user",
-    "allocatableEntityExpression": ""
-  },
-  {
-    "allocationType": "agency",
-    "id": "agency",
-    "attributes": ["branch"],
-    "userExpression": "",
-    "allocateeType": "agency",
     "allocatableEntityExpression": ""
   },
   {
@@ -36,7 +25,6 @@
     "id": "agency-agent",
     "attributes": ["entity"],
     "userExpression": "",
-    "allocateeType": "user",
     "allocatableEntityExpression": ""
   }
 ]

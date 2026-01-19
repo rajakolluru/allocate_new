@@ -3,7 +3,7 @@ package com.vymo.collectiq.allocation.model;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class User extends HashMap<String,String>{
+public class Allocatee extends HashMap<String,String>{
 
     public String getId(){
         return get("id");
@@ -12,8 +12,8 @@ public class User extends HashMap<String,String>{
     public boolean equals(Object o) {
         String id = getId();
         if (this == o) return true;
-        if (!(o instanceof User user)) return false;
-        String otherId = user.getId();
+        if (!(o instanceof Allocatee allocatee)) return false;
+        String otherId = allocatee.getId();
         if (!super.equals(o)) return false;
         return Objects.equals(id, otherId);
     }

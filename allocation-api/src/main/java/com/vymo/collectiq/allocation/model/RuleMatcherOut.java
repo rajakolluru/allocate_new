@@ -7,14 +7,14 @@ import java.util.Map;
 
 public class RuleMatcherOut {
     public Rule  rule;
-    public List<User> users = new ArrayList<>();
+    public List<Allocatee> allocatees = new ArrayList<>();
     public Map<String,Object> metadata = new HashMap<>();
 
     @Override
     public String toString() {
         return "RuleMatcherOut{" +
                 "ruleMatched = " + rule +
-                ", #users = " + users.size() +
+                ", #users = " + allocatees.size() +
                 '}';
     }
 }

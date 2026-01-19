@@ -1,15 +1,14 @@
 package com.vymo.collectiq.allocation.service.check;
 
-import com.vymo.collectiq.allocation.model.User;
-import com.vymo.collectiq.allocation.service.allocation.counts.AllocationCache;
+import com.vymo.collectiq.allocation.model.Allocatee;
+import com.vymo.collectiq.allocation.service.allocation.counts.AllocationCountTracker;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Map;
-
 public class ThresholdCheckerImpl implements ThresholdChecker{
-    @Autowired AllocationCache allocationCache;
+    @Autowired
+    AllocationCountTracker allocationCache;
     @Override
-    public boolean eligible(User user) {
-        return  allocationCache.incrementCount(user);
+    public boolean eligible(String allocateeType,Allocatee allocatee) {
+        return  allocationCache.incrementCount(allocateeType,allocatee);
     }
 }

@@ -15,7 +15,7 @@ public class AllocationStrategyFactory {
     }
 
     public AllocationStrategy obtainAllocationStrategy(){
-        String chosenAllocationStrategy = (String)configServer.getConfig("strategy");
+        String chosenAllocationStrategy = configServer.getStrategy();
         return  strategies.get(chosenAllocationStrategy);
     }
 

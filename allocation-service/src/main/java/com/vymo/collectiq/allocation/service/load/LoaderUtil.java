@@ -2,8 +2,8 @@ package com.vymo.collectiq.allocation.service.load;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vymo.collectiq.allocation.model.Allocatee;
 import com.vymo.collectiq.allocation.model.Rule;
-import com.vymo.collectiq.allocation.model.User;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,8 +13,8 @@ public class LoaderUtil {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public static List<User> loadUsers(String csvFilePath) throws IOException {
-        List<User> userList = new ArrayList<>();
+    public static List<Allocatee> loadUsers(String csvFilePath) throws IOException {
+        List<Allocatee> allocateeList = new ArrayList<>();
 
         // Load CSV from resources (classpath)
         try (InputStream inputStream = new FileInputStream(csvFilePath)) {
@@ -33,37 +33,19 @@ public class LoaderUtil {
                     String[] values = line.split(",");
                     if (values.length >= 6) {
 
-                        User user = new User();
-                        user.put(headers[0].trim(),values[0].trim());
-                        user.put(headers[1].trim(),values[1].trim());
-                        user.put(headers[2].trim(),values[2].trim());
-                        user.put(headers[3].trim(),values[3].trim());
-                        user.put(headers[4].trim(),values[4].trim());
-                        user.put(headers[5].trim(),values[5].trim());
-                        userList.add(user);
+                        Allocatee allocatee = new Allocatee();
+                        allocatee.put(headers[0].trim(),values[0].trim());
+                        allocatee.put(headers[1].trim(),values[1].trim());
+                        allocatee.put(headers[2].trim(),values[2].trim());
+                        allocatee.put(headers[3].trim(),values[3].trim());
+                        allocatee.put(headers[4].trim(),values[4].trim());
+                        allocatee.put(headers[5].trim(),values[5].trim());
+                        allocateeList.add(allocatee);
                     }
                 }
             }
         }
-
-        return userList;
+        return allocateeList;
     }
 
-    public static List<Rule> loadRules(String path) throws IOException {
-        try (InputStream inputStream = LoaderUtil.class.getResourceAsStream("/rules.json")) {
-            if (inputStream == null) {
-                throw new IllegalStateException("rules.json not found in resources folder!");
-            }
-
-            List<Rule> rules = objectMapper.readValue(
-                    inputStream,
-                    new TypeReference<List<Rule>>() {}
-            );
-
-            // Print to verify
-            rules.forEach(System.out::println);
-            return rules;
-        }
-
-    }
 }

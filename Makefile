@@ -48,7 +48,7 @@ run:
 	mvn -Drevision=$(version) spring-boot:run
 
 # check-tag: checks if the tag name has been passed as a parameter to the "make" command
-# This is internally used by the other goals and should not be invoked by the end user. Hence it 
+# This is internally used by the other goals and should not be invoked by the end allocatee. Hence it
 # should not show up in the documentation
 .PHONY: check-tag
 check-tag:

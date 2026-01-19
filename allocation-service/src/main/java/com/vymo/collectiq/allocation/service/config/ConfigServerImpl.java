@@ -3,18 +3,42 @@ package com.vymo.collectiq.allocation.service.config;
 import java.util.Map;
 
 public class ConfigServerImpl implements ConfigServer{
-    public Map<String, String> getConfigs() {
-        return configs;
+    public AllocationConfig getConfig() {
+        return config;
+    }
+    public void setConfig(AllocationConfig c) {
+        this.config = c;
     }
 
-    public void setConfigs(Map<String, String> configs) {
-        this.configs = configs;
+    private AllocationConfig config;
+
+    public String getStrategy() {
+        return config.strategy;
     }
 
-    private  Map<String,String> configs;
-    @Override
-    public String getConfig(String configName) {
-        // System.out.println("Config map is " + configs);
-        return configs.get(configName);
+    public int getThreshold(String allocateeType){
+        return config.threshold.computeIfAbsent(allocateeType,a->0);
+    }
+
+    public static class AllocationConfig {
+        public String getStrategy() {
+            return strategy;
+        }
+
+        public void setStrategy(String strategy) {
+            this.strategy = strategy;
+        }
+
+        public String strategy;
+
+        public Map<String, Integer> getThreshold() {
+            return threshold;
+        }
+
+        public void setThreshold(Map<String, Integer> threshold) {
+            this.threshold = threshold;
+        }
+
+        public Map<String,Integer> threshold;
     }
 }

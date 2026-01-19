@@ -1,8 +1,8 @@
 package com.vymo.collectiq.allocation.service.impl;
 
 import com.vymo.collectiq.allocation.dto.AllocationInput;
+import com.vymo.collectiq.allocation.model.Allocatee;
 import com.vymo.collectiq.allocation.model.RuleMatcherOut;
-import com.vymo.collectiq.allocation.model.User;
 import com.vymo.collectiq.allocation.service.AllocationService;
 import com.vymo.collectiq.allocation.service.allocation.AgencyAllocationWeightages;
 import com.vymo.collectiq.allocation.service.allocation.AllocationStrategy;
@@ -24,30 +24,30 @@ public class AllocationServiceImpl implements AllocationService{
     @Autowired private ThresholdChecker thresholdChecker;
     @Autowired private AgencyAllocationWeightages agencyAllocationWeightages;
 
-    public User doAllocation(AllocationInput input){
+    public Allocatee doAllocation(AllocationInput input){
         Map<String, String> allocatableEntity = input.allocatableEntity;
         RuleMatcherOut ruleMatcherOut = ruleSpecificHashCache.filterUsersByRules(input);
-        List<User> matchedUsers = ruleMatcherOut.users;
-        if (matchedUsers == null || matchedUsers.isEmpty()){
+        List<Allocatee> matchedAllocatees = ruleMatcherOut.allocatees;
+        if (matchedAllocatees == null || matchedAllocatees.isEmpty()){
             logger.warn("No matched users found for " + allocatableEntity);
             return null;
         }
         // Allocate one of the users to the allocatable entity.
-        User allocatedUser = null;
+        Allocatee allocatedAllocatee = null;
         do {
             // Remove the allocatedUser from future considerations in case threshold check failed.
-            if(allocatedUser != null){
-                matchedUsers.remove(allocatedUser);
+            if(allocatedAllocatee != null){
+                matchedAllocatees.remove(allocatedAllocatee);
             }
             AllocationStrategy allocationStrategy;
             if (input.allocationStrategy != null && !input.allocationStrategy.isEmpty())
                 allocationStrategy = allocationStrategyFactory.obtainAllocationStrategy(input.allocationStrategy);
             else
                 allocationStrategy = allocationStrategyFactory.obtainAllocationStrategy();
-            allocatedUser = allocationStrategy.allocate(ruleMatcherOut,input.allocatableEntity);
-            if (allocatedUser == null) return null;
-        }while(!thresholdChecker.eligible(allocatedUser));
-        return allocatedUser;
+            allocatedAllocatee = allocationStrategy.allocate(ruleMatcherOut,input.allocatableEntity);
+            if (allocatedAllocatee == null) return null;
+        }while(!thresholdChecker.eligible(ruleMatcherOut.rule.allocateeType,allocatedAllocatee));
+        return allocatedAllocatee;
     }
 
     public void assignWeightages (String agency, Map<String,Integer> weightages){

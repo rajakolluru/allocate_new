@@ -3,6 +3,18 @@ package com.vymo.collectiq.allocation.generator;
 import java.io.File;
 import java.util.Arrays;
 
+/**
+ * Allows the generation oif multiple attributes in the following format.
+ * if there are 3 attributes and cardinality is 2, we will have 2x2x2 = 8 combinations like:
+ * id1, a1-1, a2-1, a3-1
+ * id2, a1-1, a2-1, a3-2
+ * id3, a1-1, a2-2, a3-1
+ * id4, a1-1, a2-2, a3-2
+ * id5, a1-2, a2-1, a3-1
+ * id6, a1-2, a2-1, a3-2
+ * id5, a1-2, a2-2, a3-1
+ * id6, a1-2, a2-2, a3-2
+ */
 public class GenUtils {
     public static void main(String[] args){
         int attributeCardinality = 2;

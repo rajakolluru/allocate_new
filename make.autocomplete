@@ -1,5 +1,5 @@
 # Enables auto complete for the make program.
-# It will allow users to start typing commands and complete them by specifying tab
+# It will allow allocatees to start typing commands and complete them by specifying tab
 #
 while read R
 do

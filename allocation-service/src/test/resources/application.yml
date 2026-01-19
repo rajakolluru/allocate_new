@@ -1,4 +1,4 @@
-ogging:
+logging:
   level:
     ROOT: INFO
     org.hibernate.SQL: INFO
@@ -35,9 +35,12 @@ spring:
     cache: false
 
 allocation:
-  configs:
+  config:
     strategy: random
-    threshold: 100
+    threshold:
+      agency: 100
+      user: 1000
+
 
 server:
   port: 8000

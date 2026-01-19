@@ -28,7 +28,7 @@ public class GenCases {
             String entity = "entity" + aindex[2];
             String pincode = "pincode" + aindex[3];
             String territory = "territory" + aindex[4];
-            String data = "%s,%s,%s,%s,%s,%s\n".formatted("id" + i, branch,
+            String data = "%s,%s,%s,%s,%s,%s\n".formatted("case" + i, branch,
                     product, entity, pincode, territory);
             aindex = incrementAindex(aindex,attributeCardinality);
             writer.write(data);

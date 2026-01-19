@@ -2,14 +2,13 @@ package com.vymo.collectiq.allocation.configuration;
 
 import com.vymo.collectiq.allocation.service.AllocationService;
 import com.vymo.collectiq.allocation.service.allocation.*;
-import com.vymo.collectiq.allocation.service.allocation.counts.AllocationCache;
+import com.vymo.collectiq.allocation.service.allocation.counts.AllocationCountTracker;
 import com.vymo.collectiq.allocation.service.check.ThresholdChecker;
 import com.vymo.collectiq.allocation.service.check.ThresholdCheckerImpl;
 import com.vymo.collectiq.allocation.service.config.ConfigServerImpl;
 import com.vymo.collectiq.allocation.service.healthcheck.AllocationHealthChecker;
 import com.vymo.collectiq.allocation.service.impl.AllocationServiceImpl;
 import com.vymo.collectiq.allocation.service.rule.RuleSpecificHashCache;
-import com.vymo.collectiq.allocation.service.users.UsersDB;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,10 +27,6 @@ public class AllocationConfiguration {
 	@Bean AllocationHealthChecker allocationHealthChecker(){
     	return new AllocationHealthChecker();
     }
-
-	@Bean UsersDB usersDB(){
-		return new UsersDB();
-	}
 
 	@Bean
 	RuleSpecificHashCache ruleSpecificCache() throws Exception{
@@ -77,8 +72,8 @@ public class AllocationConfiguration {
 	}
 
 	@Bean
-	AllocationCache allocationCache() throws Exception{
-		return new AllocationCache();
+	AllocationCountTracker allocationCache() throws Exception{
+		return new AllocationCountTracker();
 	}
 
 	@Bean
