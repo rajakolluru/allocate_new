@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Rule {
     public static final  String DEFAULT_ALLOCATEE_TYPE = "user";
+    public int priority = 1;
     public Expression parsedUserExpression;
     public Expression parsedAllocatableEntityExpression;
     private String id;

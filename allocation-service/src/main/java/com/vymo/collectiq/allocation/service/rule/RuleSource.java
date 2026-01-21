@@ -7,6 +7,7 @@ import org.chenile.base.exception.ErrorNumException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Comparator;
 import java.util.List;
 
 public class RuleSource {
@@ -18,11 +19,13 @@ public class RuleSource {
             }
 
             ObjectMapper objectMapper = new ObjectMapper();
-            this.allRules = objectMapper.readValue(
+            List<Rule> rules  = objectMapper.readValue(
                     inputStream,
-                    new TypeReference<List<Rule>>() {}
+                    new TypeReference<>() {
+                    }
             );
-
+            rules.sort(Comparator.comparingInt(o -> o.priority));
+            this.allRules = rules;
             // Print to verify
             this.allRules.forEach(System.out::println);
         }
