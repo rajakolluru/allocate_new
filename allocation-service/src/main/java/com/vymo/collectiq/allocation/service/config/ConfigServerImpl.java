@@ -12,8 +12,8 @@ public class ConfigServerImpl implements ConfigServer{
 
     private AllocationConfig config;
 
-    public String getStrategy() {
-        return config.strategy;
+    public String getStrategy(String allocationType) {
+        return config.strategy.computeIfAbsent(allocationType,t -> config.strategy.get("default"));
     }
 
     public int getThreshold(String allocateeType){
@@ -21,15 +21,15 @@ public class ConfigServerImpl implements ConfigServer{
     }
 
     public static class AllocationConfig {
-        public String getStrategy() {
+        public Map<String, String> getStrategy() {
             return strategy;
         }
 
-        public void setStrategy(String strategy) {
+        public void setStrategy(Map<String, String> strategy) {
             this.strategy = strategy;
         }
 
-        public String strategy;
+        public Map<String,String> strategy;
 
         public Map<String, Integer> getThreshold() {
             return threshold;

@@ -36,7 +36,10 @@ spring:
 
 allocation:
   config:
-    strategy: least.used
+    strategy:
+      default: least.used
+      agency: random
+      agency-to-agent: round.robin
     threshold:
       agency: 100
       user: 1000

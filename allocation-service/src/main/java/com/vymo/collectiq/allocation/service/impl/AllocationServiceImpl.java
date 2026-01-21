@@ -43,7 +43,7 @@ public class AllocationServiceImpl implements AllocationService{
             if (input.allocationStrategy != null && !input.allocationStrategy.isEmpty())
                 allocationStrategy = allocationStrategyFactory.obtainAllocationStrategy(input.allocationStrategy);
             else
-                allocationStrategy = allocationStrategyFactory.obtainAllocationStrategy();
+                allocationStrategy = allocationStrategyFactory.obtainDefaultAllocationStrategy(input.allocationType);
             allocatedAllocatee = allocationStrategy.allocate(ruleMatcherOut,input.allocatableEntity);
             if (allocatedAllocatee == null) return null;
         }while(!thresholdChecker.eligible(ruleMatcherOut.rule.allocateeType,allocatedAllocatee));
